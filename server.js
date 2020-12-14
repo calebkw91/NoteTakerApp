@@ -32,7 +32,7 @@ app.get("/notes", function(req, res) {
 // Displays all characters
 app.get("/api/notes", function(req, res) 
 {
-    res.send(JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.JSON"))));
+    res.send(JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json"))));
 });
 
 app.post("/api/notes", function(req, res) 
@@ -41,14 +41,14 @@ app.post("/api/notes", function(req, res)
     let notes = [];
     let newNote = req.body;
 
-    notes = JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.JSON")));
+    notes = JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json")));
 
     newNote.id = notes.length;
 
     notes.push(newNote);
     notes = JSON.stringify(notes);
 
-    fs.writeFile(path.join(__dirname, "/db/db.JSON"), notes, (err) =>
+    fs.writeFile(path.join(__dirname, "/db/db.json"), notes, (err) =>
     {
         if(err)
         {
@@ -67,7 +67,7 @@ app.delete("/api/notes/:id", function(req, res)
 {
     deleteID = req.params.id;
 
-    let savedNotes = JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.JSON")));
+    let savedNotes = JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json")));
     let notes = savedNotes.filter(note =>
         {
             return note.id != deleteID;
@@ -75,7 +75,7 @@ app.delete("/api/notes/:id", function(req, res)
 
     notes = JSON.stringify(notes);
 
-    fs.writeFile(path.join(__dirname, "/db/db.JSON"), notes, (err) =>
+    fs.writeFile(path.join(__dirname, "/db/db.json"), notes, (err) =>
     {
         if(err)
         {
