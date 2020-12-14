@@ -11,6 +11,7 @@ const readFileContent = util.promisify(fs.readFile);
 // =============================================================
 let app = express();
 let PORT = process.env.PORT || 3001;
+let id = "0";
 
 // Sets up the Express app to handle fullHouse parsing
 app.use(express.urlencoded({ extended: true }));
@@ -43,7 +44,8 @@ app.post("/api/notes", function(req, res)
 
     notes = JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json")));
 
-    newNote.id = notes.length;
+    newNote.id = id;
+    id++;
 
     notes.push(newNote);
     notes = JSON.stringify(notes);
