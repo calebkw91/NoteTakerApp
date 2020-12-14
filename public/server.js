@@ -34,6 +34,7 @@ let writeNotes = (notes) =>
     });
 }
 
+
 // Routes
 // =============================================================
 
@@ -58,12 +59,65 @@ app.get("/api/notes", function(req, res)
 
 app.post("/api/notes", function(req, res) 
 {
-    return res.json(customers);
+
+    let notes = [];
+    let newNote = req.body;
+
+    readFileContent(path.join(__dirname, '../db/db.JSON'))
+        .then(data =>
+        {
+            notes = JSON.parse(data);
+
+            newNote.id = notes.length;
+
+            notes.push(newNote);
+            notes = JSON.stringify(notes);
+
+            fs.writeFile(path.join(__dirname, '../db/db.JSON'), notes, (err) =>
+            {
+                if(err)
+                {
+                    return console.log(err);
+                }
+                else
+                {
+                    console.log("File Saved!");
+                }
+
+                res.end();
+            });
+        });
 });
 
-app.delete("/api/notes", function(req, res) 
+app.delete("/api/notes/:id", function(req, res) 
 {
-    return res.json(customers);
+    deleteID = req.params.id;
+
+    readFileContent(path.join(__dirname, '../db/db.JSON'))
+        .then(data =>
+        {
+            let savedNotes = JSON.parse(data);
+            let notes = savedNotes.filter(note =>
+                {
+                    return note.id != deleteID;
+                })
+
+            notes = JSON.stringify(notes);
+
+            fs.writeFile(path.join(__dirname, '../db/db.JSON'), notes, (err) =>
+            {
+                if(err)
+                {
+                    return console.log(err);
+                }
+                else
+                {
+                    console.log("File Saved!");
+                }
+
+                res.end();
+            });
+        });
 });
 
 // Displays a single character, or returns false
