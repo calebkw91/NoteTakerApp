@@ -17,24 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')))
 
-let writeNotes = (notes) =>
-{
-    notes = JSON.stringify(notes);
-
-    fs.writeFile(path.join(__dirname, '../db/db.JSON'), notes, (err) =>
-    {
-        if(err)
-        {
-            return console.log(err);
-        }
-        else
-        {
-            console.log("File Saved!");
-        }
-    });
-}
-
-
 // Routes
 // =============================================================
 
@@ -50,11 +32,7 @@ app.get("/notes", function(req, res) {
 // Displays all characters
 app.get("/api/notes", function(req, res) 
 {
-    readFileContent(path.join(__dirname, '../db/db.JSON'))
-        .then(data =>
-        {
-            res.send(JSON.parse(data));
-        });
+    res.send(JSON.parse(fs.readFileSync(path.join(__dirname, '../db/db.JSON'))));
 });
 
 app.post("/api/notes", function(req, res) 
@@ -63,61 +41,53 @@ app.post("/api/notes", function(req, res)
     let notes = [];
     let newNote = req.body;
 
-    readFileContent(path.join(__dirname, '../db/db.JSON'))
-        .then(data =>
+    notes = JSON.parse(fs.readFileSync(path.join(__dirname, '../db/db.JSON')));
+
+    newNote.id = notes.length;
+
+    notes.push(newNote);
+    notes = JSON.stringify(notes);
+
+    fs.writeFile(path.join(__dirname, '../db/db.JSON'), notes, (err) =>
+    {
+        if(err)
         {
-            notes = JSON.parse(data);
+            return console.log(err);
+        }
+        else
+        {
+            console.log("File Saved!");
+        }
 
-            newNote.id = notes.length;
-
-            notes.push(newNote);
-            notes = JSON.stringify(notes);
-
-            fs.writeFile(path.join(__dirname, '../db/db.JSON'), notes, (err) =>
-            {
-                if(err)
-                {
-                    return console.log(err);
-                }
-                else
-                {
-                    console.log("File Saved!");
-                }
-
-                res.end();
-            });
-        });
+        res.end();
+    });
 });
 
 app.delete("/api/notes/:id", function(req, res) 
 {
     deleteID = req.params.id;
 
-    readFileContent(path.join(__dirname, '../db/db.JSON'))
-        .then(data =>
+    let savedNotes = JSON.parse(fs.readFileSync(path.join(__dirname, '../db/db.JSON')));
+    let notes = savedNotes.filter(note =>
         {
-            let savedNotes = JSON.parse(data);
-            let notes = savedNotes.filter(note =>
-                {
-                    return note.id != deleteID;
-                })
+            return note.id != deleteID;
+        })
 
-            notes = JSON.stringify(notes);
+    notes = JSON.stringify(notes);
 
-            fs.writeFile(path.join(__dirname, '../db/db.JSON'), notes, (err) =>
-            {
-                if(err)
-                {
-                    return console.log(err);
-                }
-                else
-                {
-                    console.log("File Saved!");
-                }
+    fs.writeFile(path.join(__dirname, '../db/db.JSON'), notes, (err) =>
+    {
+        if(err)
+        {
+            return console.log(err);
+        }
+        else
+        {
+            console.log("File Saved!");
+        }
 
-                res.end();
-            });
-        });
+        res.end();
+    });
 });
 
 // Starts the server to begin listening
