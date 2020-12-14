@@ -120,46 +120,6 @@ app.delete("/api/notes/:id", function(req, res)
         });
 });
 
-// Displays a single character, or returns false
-app.get("/api/waitlist", function(req, res) 
-{
-    return res.json(waitlist);
-});
-
-app.post("/api/clear", function(req, res) 
-{
-    customers = [];
-    waitlist = [];
-});
-
-// Create New Characters - takes in JSON input
-app.post("/api/tables", function(req, res) 
-{
-    // req.body hosts is equal to the JSON post sent from the user
-    // This works because of our body parsing middleware
-
-    let newReservation = req.body;
-    let fullHouse = true;
-
-    // Using a RegEx Pattern to remove spaces from newCharacter
-    // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-
-    console.log(newReservation);
-
-    if(customers.length < 5)
-    {
-        customers.push(newReservation);
-        fullHouse = true;
-    }
-    else
-    {
-        waitlist.push(newReservation);
-        fullHouse = false;
-    }
-
-    res.send(fullHouse);
-});
-
 // Starts the server to begin listening
 // =============================================================
 app.listen(PORT, function() {
