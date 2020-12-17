@@ -11,7 +11,7 @@ const readFileContent = util.promisify(fs.readFile);
 // =============================================================
 let app = express();
 let PORT = process.env.PORT || 3001;
-let id = "0";
+let id = 0;
 
 // Sets up the Express app to handle fullHouse parsing
 app.use(express.urlencoded({ extended: true }));
