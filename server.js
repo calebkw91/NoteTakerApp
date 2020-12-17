@@ -61,7 +61,7 @@ app.post("/api/notes", function(req, res)
             console.log("File Saved!");
         }
 
-        res.end();
+        res.send();
     });
 });
 
