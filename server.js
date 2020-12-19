@@ -3,7 +3,6 @@
 let express = require("express");
 let path = require("path");
 let fs = require("fs");
-let util = require("util");
 
 // Sets up the Express App
 // =============================================================
