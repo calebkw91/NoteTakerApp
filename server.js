@@ -5,8 +5,6 @@ let path = require("path");
 let fs = require("fs");
 let util = require("util");
 
-const readFileContent = util.promisify(fs.readFile);
-
 // Sets up the Express App
 // =============================================================
 let app = express();
@@ -21,7 +19,6 @@ app.use(express.static(path.join(__dirname, '/public')))
 // Routes
 // =============================================================
 
-// Basic route that sends the user first to the AJAX Page
 app.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
@@ -30,7 +27,6 @@ app.get("/notes", function(req, res) {
   res.sendFile(path.join(__dirname, "public/notes.html"));
 });
 
-// Displays all characters
 app.get("/api/notes", function(req, res) 
 {
     res.send(JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json"))));
